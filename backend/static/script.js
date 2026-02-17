@@ -46,7 +46,7 @@ async function analyzeResume() {
 
     try {
 
-        const response = await fetch("http://resumematch-ai-uocz.onrender.com/analyze", {
+        const response = await fetch("/analyze", {
             method: "POST",
             body: formData
         });
