@@ -1,31 +1,43 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import os
 
-# Import our modules
 from resume_parser import extract_resume_text
 from matcher import calculate_match_score, extract_common_keywords
 
-# ---------------------------
-# Flask App Setup
-# ---------------------------
 
 app = Flask(__name__)
 CORS(app)
 
 UPLOAD_FOLDER = "uploads"
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+# Ensure upload folder exists
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
 
 # ---------------------------
-# Home Route (Test)
+# Frontend Page Routes
 # ---------------------------
 
 @app.route("/")
 def home():
-    return "ResumeMatch AI Backend Running Successfully 🚀"
+    return render_template("index.html")
+
+
+@app.route("/dashboard")
+def dashboard():
+    return render_template("dashboard.html")
+
+
+@app.route("/insights")
+def insights():
+    return render_template("insights.html")
+
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
 
 
 # ---------------------------
@@ -33,65 +45,40 @@ def home():
 # ---------------------------
 
 @app.route("/analyze", methods=["POST"])
-def analyze_resume():
+def analyze():
 
-    # Check resume file
     if "resume" not in request.files:
-        return jsonify({"error": "No resume file uploaded"}), 400
+        return jsonify({"status": "error", "message": "No resume uploaded"})
 
     resume_file = request.files["resume"]
-
-    # Check job description
     job_description = request.form.get("job_description")
 
-    if resume_file.filename == "":
-        return jsonify({"error": "No resume file selected"}), 400
-
     if not job_description:
-        return jsonify({"error": "Job description is missing"}), 400
+        return jsonify({"status": "error", "message": "Job description missing"})
 
     # Save uploaded resume
-    file_path = os.path.join(app.config["UPLOAD_FOLDER"], resume_file.filename)
+    file_path = os.path.join(UPLOAD_FOLDER, resume_file.filename)
     resume_file.save(file_path)
 
-    # ---------------------------
-    # Resume Text Extraction
-    # ---------------------------
-
+    # Extract resume text
     resume_text = extract_resume_text(file_path)
-    print("========== RESUME TEXT PREVIEW ==========")
-    print(resume_text[:800])
-    print("========================================")
 
+    # Calculate match score
+    score = calculate_match_score(resume_text, job_description)
 
-    if resume_text == "Unsupported file format":
-        return jsonify({"error": "Unsupported resume format"}), 400
-
-    # ---------------------------
-    # NLP Matching Engine
-    # ---------------------------
-
-    match_percentage = calculate_match_score(resume_text, job_description)
-
-    common_keywords = extract_common_keywords(resume_text, job_description)
-
-    # ---------------------------
-    # Send Response
-    # ---------------------------
+    # Extract matched skills/keywords
+    matched_keywords = extract_common_keywords(resume_text, job_description)
 
     return jsonify({
         "status": "success",
-        "match_percentage": match_percentage,
-        "common_keywords": common_keywords,
-        "message": "Resume analyzed successfully"
+        "match_percentage": score,
+        "common_keywords": matched_keywords
     })
 
 
 # ---------------------------
-# Run Server
+# Run Server (Render Compatible)
 # ---------------------------
-
-import os
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
