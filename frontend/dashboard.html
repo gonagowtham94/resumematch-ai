@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard | ResumeMatch AI</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <h1>ResumeMatch <span>AI</span></h1>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="dashboard.html" class="active">Dashboard</a></li>
+      <li><a href="insights.html">Insights</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <section class="hero">
+    <h2>Resume Matching Dashboard</h2>
+    <p>
+      Upload a resume and job description to get
+      <span class="highlight">AI-powered match analysis</span>
+      in real time.
+    </p>
+  </section>
+
+  <!-- INPUT SECTION -->
+  <section class="grid">
+
+    <!-- Resume Upload -->
+    <div class="card">
+      <h3>📄 Upload Resume</h3>
+      <p>Select candidate resume (PDF or DOCX).</p>
+
+      <input type="file" id="resumeFile"
+             style="margin-top:15px;
+                    width:100%;
+                    padding:14px;
+                    border-radius:14px;
+                    border:none;
+                    background:rgba(255,255,255,0.1);
+                    color:#e5e7eb;">
+    </div>
+
+    <!-- Job Description -->
+    <div class="card">
+      <h3>📝 Job Description</h3>
+      <p>Paste job requirements below.</p>
+
+      <textarea id="jobDescription"
+        placeholder="Paste job description here..."
+        style="margin-top:15px;
+               width:100%;
+               height:160px;
+               padding:14px;
+               border-radius:14px;
+               border:none;
+               background:rgba(255,255,255,0.1);
+               color:#e5e7eb;
+               resize:none;"></textarea>
+    </div>
+
+  </section>
+
+  <!-- ACTION BUTTON -->
+  <section class="hero" style="padding-top:40px;">
+    <button onclick="analyzeResume()">Analyze Resume</button>
+  </section>
+
+  <!-- RESULT SECTION -->
+  <section class="grid" id="resultsSection">
+
+    <!-- Match Score -->
+    <div class="card">
+      <h3>🎯 Match Score</h3>
+      <p id="matchScore" class="glow" style="font-size:2.6rem; margin-top:10px;">
+        --
+      </p>
+      <span class="badge">Live Result</span>
+    </div>
+
+    <!-- Matched Keywords -->
+    <div class="card">
+      <h3>✅ Matched Keywords</h3>
+      <p id="matchedSkills">
+        Waiting for analysis...
+      </p>
+      <span class="badge">Skill Overlap</span>
+    </div>
+
+  </section>
+
+  <!-- AI Recommendation -->
+  <section class="grid">
+    <div class="card">
+      <h3>🤖 AI Recommendation</h3>
+      <p id="recommendationText">
+        Upload resume and analyze to generate recommendation.
+      </p>
+      <span class="badge">Decision Support</span>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    © 2026 ResumeMatch AI • ATS Dashboard Module
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="script.js"></script>
+
+</body>
+</html>

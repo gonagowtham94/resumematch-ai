@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Insights | ResumeMatch AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <h1>ResumeMatch <span>AI</span></h1>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="insights.html" class="active">Insights</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+</nav>
+
+<!-- HEADER -->
+<section class="hero">
+  <h2>AI Resume Insights</h2>
+  <p>
+    Advanced analytics powered by
+    <span class="highlight">machine learning resume intelligence</span>.
+  </p>
+</section>
+
+<!-- SCORE SECTION -->
+<section class="grid">
+
+  <div class="card">
+    <h3>📊 Overall Match Score</h3>
+    <p id="insightScore" class="glow" style="font-size:2.4rem;">--</p>
+    <span class="badge">Live Analysis</span>
+  </div>
+
+  <div class="card">
+    <h3>🎯 AI Verdict</h3>
+    <p id="insightVerdict">Waiting for analysis...</p>
+    <span class="badge">Recruiter View</span>
+  </div>
+
+</section>
+
+<!-- SKILLS SECTION -->
+<section class="grid">
+
+  <div class="card">
+    <h3>✅ Matched Skills</h3>
+    <ul id="insightSkills" class="skill-list">
+      <li>No analysis data found</li>
+    </ul>
+  </div>
+
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  © 2026 ResumeMatch AI • Analytics Engine Module
+</footer>
+
+<!-- DYNAMIC SCRIPT -->
+<script>
+window.onload = function () {
+
+    const score = localStorage.getItem("matchScore");
+    const skills = localStorage.getItem("matchedSkills");
+
+    const scoreElement = document.getElementById("insightScore");
+    const skillList = document.getElementById("insightSkills");
+    const verdictElement = document.getElementById("insightVerdict");
+
+    if (!score) {
+        scoreElement.innerText = "No Analysis Found";
+        verdictElement.innerText = "Please analyze a resume from the dashboard.";
+        return;
+    }
+
+    // Update score
+    scoreElement.innerText = score + "%";
+
+    // Update verdict
+    const numericScore = parseFloat(score);
+
+    if (numericScore >= 80) {
+        verdictElement.innerText = "Strong candidate match. Highly recommended.";
+    } 
+    else if (numericScore >= 60) {
+        verdictElement.innerText = "Moderate match. Suitable with improvements.";
+    } 
+    else {
+        verdictElement.innerText = "Low compatibility. Resume optimization required.";
+    }
+
+    // Update skills
+    skillList.innerHTML = "";
+
+    if (skills) {
+        const parsedSkills = JSON.parse(skills);
+
+        if (parsedSkills.length > 0) {
+            parsedSkills.forEach(skill => {
+                const li = document.createElement("li");
+                li.innerText = skill;
+                skillList.appendChild(li);
+            });
+        } else {
+            skillList.innerHTML = "<li>No strong matching skills found</li>";
+        }
+    }
+
+};
+</script>
+
+</body>
+</html>
